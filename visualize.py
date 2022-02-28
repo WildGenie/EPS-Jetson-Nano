@@ -14,7 +14,7 @@ import datetime
 
 today = "data_2020W45"
 print("Opening data...")
-fi = 'data_'+str(today)+'.csv'
+fi = f'data_{today}.csv'
 raw = pd.read_csv(fi, delimiter=',', engine='python' )
 raw = raw.drop('Time stamp', axis=1)
 
@@ -104,7 +104,7 @@ print (x_test.shape)
 print("y_test")
 print (y_test.shape)
 
-model_A = tf.keras.models.load_model('NN_'+str(today)+'.h5')
+model_A = tf.keras.models.load_model(f'NN_{str(today)}.h5')
 y_predict_model = model_A.predict(x_predict)
 y_predict_model2 = model_A.predict(x_test)
 y_predict_model3 = model_A.predict(x_train)
@@ -120,7 +120,7 @@ print("y_predict_model_train: ")
 print (y_predict_model3.shape)
 
 test_size = n_rows - train_size
-print("test length: " + str(test_size))
+print(f"test length: {str(test_size)}")
 
 #print("-------------------------------MSE------------------------------------------------")
 mse = np.square(np.subtract(y_predict_true,y_predict_model)).mean()
@@ -136,20 +136,20 @@ mae2 = np.abs(np.subtract(y_test,y_predict_model2)).mean()
 mae3 = np.abs(np.subtract(y_train,y_predict_model3)).mean()
 print("--------------------------------MSE-----------------------------------------------")
 print("MSE metrics for CNN_LSTM_5 model:")
-print("MSE validation: " + str(mse2))
-print("MSE train: " + str(mse3))
-print("MSE global: " + str(mse))
+print(f"MSE validation: {str(mse2)}")
+print(f"MSE train: {str(mse3)}")
+print(f"MSE global: {str(mse)}")
 
 print("--------------------------------RMSE-----------------------------------------------")
 print("RMSE metrics for CNN_LSTM_5 model:")
-print("RMSE validation: " + str(rmse2))
-print("RMSE train: " + str(rmse3))
-print("RMSE global: " + str(rmse))
+print(f"RMSE validation: {str(rmse2)}")
+print(f"RMSE train: {str(rmse3)}")
+print(f"RMSE global: {str(rmse)}")
 print("--------------------------------MAE-----------------------------------------------")
 print("MAE metrics for CNN_LSTM_5 model:")
-print("MAE validation: " + str(mae2))
-print("MAE train: " + str(mae3))
-print("MAE global: " + str(mae))
+print(f"MAE validation: {str(mae2)}")
+print(f"MAE train: {str(mae3)}")
+print(f"MAE global: {str(mae)}")
 
 plot(y_predict_true,y_predict_model,train_size)
 plot(y_predict_true[:,-2*test_size:],y_predict_model[:,-2*test_size:],test_size)

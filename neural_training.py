@@ -30,7 +30,7 @@ def main_func():
     now = datetime.datetime.now()
     year = now.year
     week = now.isocalendar()[1]
-    df = pd.read_csv('data_'+str(year)+'W'+str(week)+'.csv', engine='python' )
+    df = pd.read_csv(f'data_{str(year)}W{str(week)}.csv', engine='python')
 
     dim=df.shape[0]
     #samples in one week (60x24x7 = 10 080)
@@ -50,7 +50,7 @@ def print_func():
     now = datetime.datetime.now()
     year = now.year
     week = now.isocalendar()[1]
-    df = pd.read_csv('data_'+str(year)+'W'+str(week)+'.csv', engine='python' )
+    df = pd.read_csv(f'data_{str(year)}W{str(week)}.csv', engine='python')
     print("raw shape:")
     print (df.shape)
     dim=df.shape[0]
@@ -73,7 +73,7 @@ def train_func():
     year = now.year
     week = now.isocalendar()[1]
     print("Starting training...")
-    fi = 'data_'+str(year)+'W'+str(week)+'.csv'
+    fi = f'data_{str(year)}W{str(week)}.csv'
     raw = pd.read_csv(fi, delimiter=',', engine='python' )
     raw = raw.drop('Time stamp', axis=1)
 
@@ -142,11 +142,11 @@ def train_func():
     model.compile(loss='mse', optimizer='adam')
     model.fit(x_train, y_train, epochs=600, batch_size=16, verbose=2)
     times = time_callback.times
-    model.save('NN_'+str(today)+'W'+str(week)+'.h5')
+    model.save(f'NN_{str(today)}W{str(week)}.h5')
     print("Training finished")
     model.summary()
 
-    model_A = tf.keras.models.load_model('NN_'+str(today)+'.h5')
+    model_A = tf.keras.models.load_model(f'NN_{str(today)}.h5')
     y_predict_model = model_A.predict(x_predict)
     y_predict_model2 = model_A.predict(x_test)
     y_predict_model3 = model_A.predict(x_train)
@@ -162,7 +162,7 @@ def train_func():
     print (y_predict_model3.shape)
 
     test_size = n_rows - train_size
-    print("test length: " + str(test_size))
+    print(f"test length: {str(test_size)}")
 
     #print("-------------------------------MSE------------------------------------------------")
     mse = np.square(np.subtract(y_predict_true,y_predict_model)).mean()
@@ -178,20 +178,20 @@ def train_func():
     mae3 = np.abs(np.subtract(y_train,y_predict_model3)).mean()
     print("--------------------------------MSE-----------------------------------------------")
     print("MSE metrics for CNN_LSTM_5 model:")
-    print("MSE validation: " + str(mse2))
-    print("MSE train: " + str(mse3))
-    print("MSE global: " + str(mse))
+    print(f"MSE validation: {str(mse2)}")
+    print(f"MSE train: {str(mse3)}")
+    print(f"MSE global: {str(mse)}")
 
     print("--------------------------------RMSE-----------------------------------------------")
     print("RMSE metrics for CNN_LSTM_5 model:")
-    print("RMSE validation: " + str(rmse2))
-    print("RMSE train: " + str(rmse3))
-    print("RMSE global: " + str(rmse))
+    print(f"RMSE validation: {str(rmse2)}")
+    print(f"RMSE train: {str(rmse3)}")
+    print(f"RMSE global: {str(rmse)}")
     print("--------------------------------MAE-----------------------------------------------")
     print("MAE metrics for CNN_LSTM_5 model:")
-    print("MAE validation: " + str(mae2))
-    print("MAE train: " + str(mae3))
-    print("MAE global: " + str(mae))
+    print(f"MAE validation: {str(mae2)}")
+    print(f"MAE train: {str(mae3)}")
+    print(f"MAE global: {str(mae)}")
 
     predict_plot = scaler.inverse_transform(y_predict_model[0])
     true_plot = scaler.inverse_transform(y_predict_true[0])
