@@ -20,7 +20,7 @@ def main_func():
     print('Establishing serial connection with Arduino...')
     arduino_data = arduino.readline()
 
-    decoded_values = str(arduino_data[0:len(arduino_data)].decode("utf-8"))
+    decoded_values = str(arduino_data[:].decode("utf-8"))
     list_values = decoded_values.split('x')
 
     for item in list_values:
@@ -30,14 +30,20 @@ def main_func():
     time_stamp=str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     print(f'Time stamp: {time_stamp}')
-    if path.exists('data_'+str(today)+'W'+str(week)+'.csv') == True:
+    if path.exists(f'data_{str(today)}W{str(week)}.csv') == True:
         data.append([time_stamp, list_in_floats[0],list_in_floats[1],list_in_floats[2]])
         node = pd.DataFrame(data, columns=['Time stamp','Active power consumed [W]','Voltage AC [V_ac]','Current AC [I_ac]'])
-        node.to_csv('data_'+str(today)+'W'+str(week)+'.csv', index = None,  mode='a', header=False)
+        node.to_csv(
+            f'data_{str(today)}W{str(week)}.csv',
+            index=None,
+            mode='a',
+            header=False,
+        )
+
     else:
         data.append([time_stamp, list_in_floats[0],list_in_floats[1],list_in_floats[2]])
         node = pd.DataFrame(data, columns=['Time stamp','Active power consumed [W]','Voltage AC [V_ac]','Current AC [I_ac]'])
-        node.to_csv('data_'+str(today)+'W'+str(week)+'.csv', index = None)
+        node.to_csv(f'data_{str(today)}W{str(week)}.csv', index = None)
 
     print('Data saved in csv file')
     arduino_data = 0
